@@ -2,7 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://ucanarmut01-tech.github.io/sitemap3.xml
-User-agent: *
-Allow: /
 
-Sitemap: https://ucanarmut01-tech.github.io/sitemap3.xml
