@@ -1,68 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
     <loc>https://ucanarmut01-tech.github.io/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2025-07-24</lastmod>
   </url>
 
   <url>
     <loc>https://ucanarmut01-tech.github.io/makale1.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://ucanarmut01-tech.github.io/makale2.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://ucanarmut01-tech.github.io/makale3.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://ucanarmut01-tech.github.io/makale4.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://ucanarmut01-tech.github.io/makale5.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://ucanarmut01-tech.github.io/makale6.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://ucanarmut01-tech.github.io/makale7.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://ucanarmut01-tech.github.io/makale8.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://ucanarmut01-tech.github.io/makale9.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://ucanarmut01-tech.github.io/makale10.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
+
+  <url>
+    <loc>https://ucanarmut01-tech.github.io/gizlilik.html</loc>
+  </url>
+
+  <url>
+    <loc>https://ucanarmut01-tech.github.io/about.html</loc>
+  </url>
+
 </urlset>
