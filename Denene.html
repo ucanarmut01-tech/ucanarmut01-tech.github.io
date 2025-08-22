@@ -34,13 +34,13 @@
     <button onclick="logout()">Çıkış Yap</button>
   </div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"></script>
+  <!-- Firebase SDK Modüler -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-  <script>
-    // Firebase yapılandırması (eski key kullanılıyor)
+    // Firebase yapılandırması
     const firebaseConfig = {
       apiKey: "AIzaSyBxjqeiGhz2stD7VLJFAvehqwK6QUSMCVM",
       authDomain: "clearfun-d2062.firebaseapp.com",
@@ -52,9 +52,9 @@
     };
 
     // Firebase başlat
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
 
     async function register() {
       const name = document.getElementById("registerName").value.trim();
@@ -64,11 +64,11 @@
       if (!name || !email || !password) { alert("Tüm alanları doldurun!"); return; }
 
       try {
-        // Aynı e-posta veya mc ismi var mı
-        const snapshot = await db.ref("users").once("value");
+        // Kullanıcıların kontrolü
+        const snapshot = await get(ref(db, "users"));
         let exists = false;
-        snapshot.forEach(child => {
-          const user = child.val();
+        snapshot.forEach(childSnap => {
+          const user = childSnap.val();
           if (user.email === email || user.name.toLowerCase() === name.toLowerCase()) {
             exists = true;
           }
@@ -77,11 +77,11 @@
         if (exists) { alert("E-posta veya Minecraft ismi zaten kayıtlı!"); return; }
 
         // Kullanıcı oluştur
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        await db.ref("users/" + userCredential.user.uid).set({ name, email });
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await set(ref(db, "users/" + userCredential.user.uid), { name, email });
 
-        // Eposta doğrulama
-        await userCredential.user.sendEmailVerification();
+        // E-posta doğrulama
+        await sendEmailVerification(userCredential.user);
         alert("Kayıt başarılı! E-posta adresinizi doğrulayın.");
       } catch (error) {
         alert("Hata: " + error.message);
@@ -93,10 +93,10 @@
       const password = document.getElementById("loginPassword").value;
 
       try {
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         if (!userCredential.user.emailVerified) {
           alert("Önce e-posta adresinizi doğrulayın!");
-          await auth.signOut();
+          await signOut(auth);
           return;
         }
         alert("Giriş başarılı! Hoşgeldiniz " + email);
@@ -106,7 +106,7 @@
     }
 
     async function logout() {
-      await auth.signOut();
+      await signOut(auth);
       alert("Çıkış yapıldı!");
     }
   </script>
