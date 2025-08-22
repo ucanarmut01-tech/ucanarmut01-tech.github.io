@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ClearFUN - Giriş & Kayıt</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f9; text-align: center; }
-    .box { background: white; padding: 20px; margin: 20px auto; width: 300px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,.1); }
-    input { width: 90%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; }
-    button { padding: 10px 20px; border: none; border-radius: 5px; background: #4CAF50; color: white; cursor: pointer; }
+    body { font-family: Arial; text-align: center; background: #f4f4f9; }
+    .box { background: #fff; padding: 20px; margin: 20px auto; width: 300px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,.1); }
+    input { width: 90%; padding: 10px; margin: 8px 0; border-radius: 5px; border: 1px solid #ccc; }
+    button { padding: 10px 20px; border-radius: 5px; border: none; background: #4CAF50; color: white; cursor: pointer; }
     button:hover { background: #45a049; }
   </style>
 </head>
@@ -34,13 +34,13 @@
     <button onclick="logout()">Çıkış Yap</button>
   </div>
 
-  <!-- Firebase SDK (v8) -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"></script>
 
   <script>
-    // Firebase yapılandırması
+    // Firebase yapılandırması (eski key kullanılıyor)
     const firebaseConfig = {
       apiKey: "AIzaSyBxjqeiGhz2stD7VLJFAvehqwK6QUSMCVM",
       authDomain: "clearfun-d2062.firebaseapp.com",
@@ -52,7 +52,7 @@
     };
 
     // Firebase başlat
-    firebase.initializeApp(firebaseConfig);
+    const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
 
@@ -61,12 +61,10 @@
       const email = document.getElementById("registerEmail").value.trim();
       const password = document.getElementById("registerPassword").value;
 
-      if (!name || !email || !password) {
-        alert("Lütfen tüm alanları doldurun!");
-        return;
-      }
+      if (!name || !email || !password) { alert("Tüm alanları doldurun!"); return; }
 
       try {
+        // Aynı e-posta veya mc ismi var mı
         const snapshot = await db.ref("users").once("value");
         let exists = false;
         snapshot.forEach(child => {
@@ -76,19 +74,15 @@
           }
         });
 
-        if (exists) {
-          alert("Bu e-posta veya Minecraft ismi zaten kayıtlı!");
-          return;
-        }
+        if (exists) { alert("E-posta veya Minecraft ismi zaten kayıtlı!"); return; }
 
+        // Kullanıcı oluştur
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        await db.ref("users/" + userCredential.user.uid).set({
-          name: name,
-          email: email
-        });
+        await db.ref("users/" + userCredential.user.uid).set({ name, email });
 
+        // Eposta doğrulama
         await userCredential.user.sendEmailVerification();
-        alert("Kayıt başarılı! Lütfen e-posta kutunuzu kontrol edin ve doğrulama yapın.");
+        alert("Kayıt başarılı! E-posta adresinizi doğrulayın.");
       } catch (error) {
         alert("Hata: " + error.message);
       }
@@ -101,11 +95,11 @@
       try {
         const userCredential = await auth.signInWithEmailAndPassword(email, password);
         if (!userCredential.user.emailVerified) {
-          alert("Lütfen önce e-posta adresinizi doğrulayın!");
+          alert("Önce e-posta adresinizi doğrulayın!");
           await auth.signOut();
           return;
         }
-        alert("Giriş başarılı! Hoşgeldin " + email);
+        alert("Giriş başarılı! Hoşgeldiniz " + email);
       } catch (error) {
         alert("Hata: " + error.message);
       }
